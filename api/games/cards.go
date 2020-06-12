@@ -7,9 +7,10 @@ import (
 
 // Card ...
 type Card struct {
-	Suit  Suit
-	Value CardValue
-	Used  bool
+	Suit        Suit      `json:"suit"`
+	Value       CardValue `json:"value"`
+	Description string    `json:"descriptor"`
+	Used        bool      `json:"used"`
 }
 
 // Deck ...
@@ -30,10 +31,10 @@ const (
 )
 
 var suits = [...]string{
-	"c",
-	"s",
-	"h",
-	"d",
+	"C",
+	"S",
+	"H",
+	"D",
 }
 
 func (s Suit) String() string {
@@ -73,7 +74,7 @@ const (
 )
 
 var cardValues = [...]string{
-	"a",
+	"A",
 	"2",
 	"3",
 	"4",
@@ -83,9 +84,9 @@ var cardValues = [...]string{
 	"8",
 	"9",
 	"10",
-	"j",
-	"q",
-	"k",
+	"J",
+	"Q",
+	"K",
 }
 
 func (c CardValue) String() string {
@@ -109,6 +110,8 @@ func NewDeck() *Deck {
 				Suit:  Suit(suit),
 				Value: CardValue(value),
 			}
+
+			deck[i].Description = deck[i].Descriptor()
 
 			i++
 		}

@@ -32,11 +32,13 @@ func (svc *Service) Websocket(w http.ResponseWriter, req *http.Request) {
 		log.Println(err)
 	}
 
-	msgs := game.Messages()
+	listener := make(chan struct{})
+
+	game.AddListener(listener)
 
 	for {
 		select {
-		case <-msgs:
+		case <-listener:
 			err := conn.WriteJSON(game)
 			if err != nil {
 				log.Println(err)

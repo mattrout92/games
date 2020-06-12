@@ -15,6 +15,7 @@ func (svc *Service) Turn(w http.ResponseWriter, req *http.Request) {
 	cardDescriptor := mux.Vars(req)["card"]
 
 	card := games.GetCardFromDescriptor(cardDescriptor)
+	card.Description = cardDescriptor
 
 	game.Turn(card)
 	json.NewEncoder(w).Encode(game)

@@ -1,28 +1,28 @@
 package games
 
-import "errors"
+import (
+	"errors"
+)
 
 var _ Game = (*FiveLives)(nil)
 
 // FiveLives ...
 type FiveLives struct {
-	ID           string   `json:"id"`
-	Name         string   `json:"name"`
-	Deck         *Deck    `json:"-"`
-	Started      bool     `json:"started"`
-	Players      []Player `json:"players"`
-	PreviousCard Card     `json:"previous_card"`
-	LivesToLose  int      `json:"lives_to_lose"`
-	GameFinished bool     `json:"game_finished"`
-	messages     chan (struct{})
+	ID             string   `json:"id"`
+	Name           string   `json:"name"`
+	Deck           *Deck    `json:"-"`
+	Started        bool     `json:"started"`
+	Players        []Player `json:"players"`
+	LastPlayerName string   `json:"last_player_name"`
+	PreviousCard   Card     `json:"previous_card"`
+	LivesToLose    int      `json:"lives_to_lose"`
+	GameFinished   bool     `json:"game_finished"`
+	listeners      [](chan (struct{}))
 }
 
-// Messages ...
-func (fl *FiveLives) Messages() chan (struct{}) {
-	if fl.messages == nil {
-		fl.messages = make(chan struct{})
-	}
-	return fl.messages
+// AddListener ...
+func (fl *FiveLives) AddListener(listener chan (struct{})) {
+	fl.listeners = append(fl.listeners, listener)
 }
 
 // AddPlayer ...
@@ -38,7 +38,9 @@ func (fl *FiveLives) AddPlayer(name string) error {
 		Lives: 5,
 	})
 
-	fl.messages <- struct{}{}
+	for _, listener := range fl.listeners {
+		listener <- struct{}{}
+	}
 
 	return nil
 }
@@ -50,6 +52,7 @@ func (fl *FiveLives) GetPlayers() []Player {
 
 // Start ...
 func (fl *FiveLives) Start() error {
+	fl.Started = true
 	if len(fl.Players) < 2 {
 		return errors.New("not enough players")
 	}
@@ -71,7 +74,9 @@ func (fl *FiveLives) Start() error {
 	fl.Players[0].Dealer = true
 	fl.Players[1].IsTurn = true
 
-	fl.messages <- struct{}{}
+	for _, listener := range fl.listeners {
+		listener <- struct{}{}
+	}
 	return nil
 }
 
@@ -81,37 +86,50 @@ func (fl *FiveLives) Turn(card Card) {
 
 	for i, player := range fl.Players {
 		if player.IsTurn && player.Lives > 0 {
-			if fl.PreviousCard.Value == card.Value {
-				playerLostLife = true
-				player.Lives = player.Lives - fl.LivesToLose
-				if (player.Lives) < 0 {
-					player.Lives = 0
+			player.LastCardPlayed = &card
+			if len(fl.PreviousCard.Description) > 0 {
+				if fl.PreviousCard.Description[0] == card.Description[0] {
+					playerLostLife = true
+					for j, lastPlayer := range fl.Players {
+						if fl.LastPlayerName == lastPlayer.Name {
+							lastPlayer.Lives = lastPlayer.Lives - fl.LivesToLose
+							if (lastPlayer.Lives) < 0 {
+								lastPlayer.Lives = 0
+							}
+							fl.Players[j] = lastPlayer
+						}
+					}
+					fl.LivesToLose++
 				}
-				fl.LivesToLose++
 			}
 
 			for j, playerCard := range player.Cards {
-				if card.Suit == playerCard.Suit && card.Value == playerCard.Value {
+				if card.Description == playerCard.Description {
 					player.Cards = remove(player.Cards, j)
 					break
 				}
 			}
 
-			fl.checkGameOver()
-
+			player.IsTurn = false
+			fl.Players[i] = player
 			if !fl.GameFinished {
 				fl.setNextPlayer(i)
+				fl.LastPlayerName = player.Name
 			}
-
-			fl.checkRoundOver()
-			fl.Players[i] = player
+			break
 		}
 	}
 
 	if !playerLostLife {
 		fl.LivesToLose = 1
 	}
-	fl.messages <- struct{}{}
+	fl.PreviousCard = card
+	fl.checkGameOver()
+
+	fl.checkRoundOver()
+	for _, listener := range fl.listeners {
+		listener <- struct{}{}
+	}
 }
 
 func (fl *FiveLives) setNextPlayer(currentPlayerPosition int) {
@@ -167,6 +185,7 @@ func (fl *FiveLives) checkRoundOver() {
 		}
 	}
 
+	fl.LastPlayerName = ""
 	fl.Deck = NewDeck()
 	fl.Deck.Shuffle()
 
@@ -224,8 +243,9 @@ func (fl *FiveLives) setNextDealer(currentDealerPosition int) int {
 }
 
 func (fl *FiveLives) setFirstPlayer(dealerPosition int) {
-	for _, player := range fl.Players {
+	for i, player := range fl.Players {
 		player.IsTurn = false
+		fl.Players[i] = player
 	}
 
 	if dealerPosition >= len(fl.Players) {
