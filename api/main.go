@@ -24,6 +24,10 @@ func main() {
 
 	r.Methods("OPTIONS", "GET").Path("/games/{gameName}/instances/{gameID}").HandlerFunc(svc.Websocket)
 
+	r.Methods("GET", "OPTIONS").Path("/healthcheck").HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
 	log.Println("starting games api")
 
 	http.ListenAndServe(":8080", Middleware(r))
