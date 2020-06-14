@@ -53,6 +53,7 @@ func (fl *FiveLives) GetPlayers() []Player {
 // Start ...
 func (fl *FiveLives) Start() error {
 	fl.Started = true
+	fl.GameFinished = false
 	if len(fl.Players) < 2 {
 		return errors.New("not enough players")
 	}
@@ -62,12 +63,17 @@ func (fl *FiveLives) Start() error {
 
 	cardNumber := 0
 	fl.LivesToLose = 1
+	fl.LastPlayerName = ""
+	fl.PreviousCard = Card{}
+	fl.LivesToLose = 1
 
 	for i := 0; i < 5; i++ {
 		for j := range fl.Players {
 			fl.Players[j].Cards = append(fl.Players[j].Cards, fl.Deck[cardNumber])
+			fl.Players[j].Lives = 5
 			fl.Deck[cardNumber].Used = true
 			cardNumber++
+			fl.Players[j].IsTurn = false
 		}
 	}
 

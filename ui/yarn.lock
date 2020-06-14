@@ -8983,7 +8983,7 @@ resolve-url@^0.2.1:
 resolve@1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
-  integrity sha1-IDEU2CrSxe2ejgQRs5ModeiJ6Xs=
+  integrity sha1-IDEU2CrSxe2ejgQRs5ModeiJ6md=
 
 resolve@1.15.0:
   version "1.15.0"

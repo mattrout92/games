@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-const apiURL = "http://localhost:8080";
+const apiURL = "https://api.mattgames.co.uk";
 
 export const create = async (gameName: string): Promise<string> => {
   const response = await Axios.post(`${apiURL}/games/${gameName}`);

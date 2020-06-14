@@ -10,7 +10,7 @@ export const Table = ({ players }: Props): JSX.Element => {
   return (
     <Grid container spacing={2}>
       {/* <img  src={TableIMG} alt="table" /> */}
-      <Grid item xs={3}>
+      <Grid item md={3}>
         {players.length > 0 && (
           <div>
             <p>{players[0].name}</p>
@@ -26,7 +26,7 @@ export const Table = ({ players }: Props): JSX.Element => {
           </div>
         )}
       </Grid>
-      <Grid item xs={3}>
+      <Grid item md={3}>
         {players.length > 1 && (
           <div>
             <p>{players[1].name}</p>
@@ -42,7 +42,7 @@ export const Table = ({ players }: Props): JSX.Element => {
           </div>
         )}
       </Grid>
-      <Grid item xs={3}>
+      <Grid item md={3}>
         {players.length > 2 && (
           <div>
             <p>{players[2].name}</p>
@@ -58,7 +58,7 @@ export const Table = ({ players }: Props): JSX.Element => {
           </div>
         )}
       </Grid>
-      <Grid item xs={3}>
+      <Grid item md={3}>
         {players.length > 3 && (
           <div>
             <p>{players[3].name}</p>
@@ -74,7 +74,7 @@ export const Table = ({ players }: Props): JSX.Element => {
           </div>
         )}
       </Grid>
-      <Grid item xs={3}>
+      <Grid item md={3}>
         {players.length > 9 && (
           <div>
             <p>{players[9].name}</p>
@@ -90,9 +90,9 @@ export const Table = ({ players }: Props): JSX.Element => {
           </div>
         )}
       </Grid>
-      <Grid item xs={3}></Grid>
-      <Grid item xs={3}></Grid>
-      <Grid item xs={3}>
+      <Grid item md={3}></Grid>
+      <Grid item md={3}></Grid>
+      <Grid item md={3}>
         {players.length > 4 && (
           <div>
             <p>{players[4].name}</p>
@@ -108,7 +108,7 @@ export const Table = ({ players }: Props): JSX.Element => {
           </div>
         )}
       </Grid>
-      <Grid item xs={3}>
+      <Grid item md={3}>
         {players.length > 8 && (
           <div>
             <p>{players[8].name}</p>
@@ -124,7 +124,7 @@ export const Table = ({ players }: Props): JSX.Element => {
           </div>
         )}
       </Grid>
-      <Grid item xs={3}>
+      <Grid item md={3}>
         {players.length > 7 && (
           <div>
             <p>{players[7].name}</p>
@@ -140,7 +140,7 @@ export const Table = ({ players }: Props): JSX.Element => {
           </div>
         )}
       </Grid>
-      <Grid item xs={3}>
+      <Grid item md={3}>
         {players.length > 6 && (
           <div>
             <p>{players[6].name}</p>
@@ -156,7 +156,7 @@ export const Table = ({ players }: Props): JSX.Element => {
           </div>
         )}
       </Grid>
-      <Grid item xs={3}>
+      <Grid item md={3}>
         {players.length > 5 && (
           <div>
             <p>{players[5].name}</p>
