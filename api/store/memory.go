@@ -60,5 +60,5 @@ func newID() string {
 		b.WriteRune(chars[rand.Intn(len(chars))])
 	}
 	str := b.String()
-	return strings.ToLower(str)
+	return str
 }

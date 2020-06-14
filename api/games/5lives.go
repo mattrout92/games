@@ -236,7 +236,7 @@ func (fl *FiveLives) setNextDealer(currentDealerPosition int) int {
 	}
 
 	for i := currentDealerPosition + 1; i < len(fl.Players); i++ {
-		if fl.Players[i].Lives > 0 {
+		if fl.Players[i].Lives > 0 && i != currentDealerPosition {
 			fl.Players[i].Dealer = true
 			return i
 		}
