@@ -53,8 +53,7 @@ func (m *Memory) Save(id string, game games.Game) {
 func newID() string {
 	rand.Seed(time.Now().UnixNano())
 	chars := []rune(
-		"abcdefghijklmnopqrstuvwxyz" +
-			"0123456789")
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	length := 4
 	var b strings.Builder
 	for i := 0; i < length; i++ {

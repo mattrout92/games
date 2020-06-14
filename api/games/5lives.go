@@ -67,6 +67,10 @@ func (fl *FiveLives) Start() error {
 	fl.PreviousCard = Card{}
 	fl.LivesToLose = 1
 
+	for j := range fl.Players {
+		fl.Players[j].Cards = []Card{}
+	}
+
 	for i := 0; i < 5; i++ {
 		for j := range fl.Players {
 			fl.Players[j].Cards = append(fl.Players[j].Cards, fl.Deck[cardNumber])
@@ -239,7 +243,7 @@ func (fl *FiveLives) setNextDealer(currentDealerPosition int) int {
 	}
 
 	for i := 0; i < len(fl.Players); i++ {
-		if fl.Players[i].Lives > 0 {
+		if fl.Players[i].Lives > 0 && i != currentDealerPosition {
 			fl.Players[i].Dealer = true
 			return i
 		}
