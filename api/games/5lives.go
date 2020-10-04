@@ -2,6 +2,7 @@ package games
 
 import (
 	"errors"
+	"fmt"
 )
 
 var _ Game = (*FiveLives)(nil)
@@ -190,7 +191,7 @@ func (fl *FiveLives) checkGameOver() {
 
 func (fl *FiveLives) checkRoundOver() {
 	for _, player := range fl.Players {
-		if len(player.Cards) > 0 {
+		if player.Lives > 0 && len(player.Cards) > 0 {
 			return
 		}
 	}
@@ -204,9 +205,11 @@ func (fl *FiveLives) checkRoundOver() {
 
 	for i := 0; i < 5; i++ {
 		for j := range fl.Players {
-			fl.Players[j].Cards = append(fl.Players[j].Cards, fl.Deck[cardNumber])
-			fl.Deck[cardNumber].Used = true
-			cardNumber++
+			if fl.Players[j].Lives > 0 {
+				fl.Players[j].Cards = append(fl.Players[j].Cards, fl.Deck[cardNumber])
+				fl.Deck[cardNumber].Used = true
+				cardNumber++
+			}
 		}
 	}
 
@@ -214,6 +217,7 @@ func (fl *FiveLives) checkRoundOver() {
 		if fl.Players[i].Dealer {
 			dealerPosition := fl.setNextDealer(i)
 			fl.setFirstPlayer(dealerPosition)
+			break
 		}
 	}
 }
@@ -222,6 +226,8 @@ func (fl *FiveLives) setNextDealer(currentDealerPosition int) int {
 	fl.Players[currentDealerPosition].Dealer = false
 
 	if currentDealerPosition >= len(fl.Players) {
+		fmt.Println("setting here")
+		fmt.Println(len(fl.Players))
 		fl.Players[0].Dealer = true
 		return 0
 	}
@@ -229,6 +235,8 @@ func (fl *FiveLives) setNextDealer(currentDealerPosition int) int {
 	if currentDealerPosition == len(fl.Players)-1 {
 		for i := range fl.Players {
 			if fl.Players[i].Lives > 0 && i != currentDealerPosition {
+				fmt.Println("setting here (235)")
+				fmt.Println(i)
 				fl.Players[i].Dealer = true
 				return i
 			}
@@ -237,6 +245,8 @@ func (fl *FiveLives) setNextDealer(currentDealerPosition int) int {
 
 	for i := currentDealerPosition + 1; i < len(fl.Players); i++ {
 		if fl.Players[i].Lives > 0 && i != currentDealerPosition {
+			fmt.Println("245")
+			fmt.Println(i)
 			fl.Players[i].Dealer = true
 			return i
 		}
@@ -244,6 +254,8 @@ func (fl *FiveLives) setNextDealer(currentDealerPosition int) int {
 
 	for i := 0; i < len(fl.Players); i++ {
 		if fl.Players[i].Lives > 0 && i != currentDealerPosition {
+			fmt.Println(254)
+			fmt.Println(i)
 			fl.Players[i].Dealer = true
 			return i
 		}

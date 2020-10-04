@@ -38,11 +38,13 @@ const App = (): JSX.Element => {
   const [game, setGame] = useState<any>({});
   const [playerName, setPlayerName] = useState<string>("");
   const [joined, setJoined] = useState<boolean>(false);
+  const [creator, setCreator] = useState<boolean>(false);
 
   const createGame = async () => {
     const gameID = await create("5Lives");
 
     setGameID(gameID);
+    setCreator(true);
   };
 
   const start = async () => {
@@ -74,7 +76,7 @@ const App = (): JSX.Element => {
     (async () => {
       if (gameID !== "") {
         const client = new W3CWebSocket(
-          `wss://api.mattgames.co.uk/games/5Lives/instances/${gameID}`
+          `ws://localhost:8080/games/5Lives/instances/${gameID}`
         );
 
         client.onmessage = (message) => {
@@ -103,7 +105,7 @@ const App = (): JSX.Element => {
             {gameID === "" ? (
               <Fragment>
                 <Grid item md={3}></Grid>
-                <Grid item justify="center" md={6}>
+                <Grid container justify="center">
                   <h1>The 5 Lives Game</h1>
                 </Grid>
                 <Grid item md={3}></Grid>
@@ -174,7 +176,7 @@ const App = (): JSX.Element => {
                 {game.players && (
                   <Grid item md={12}>
                     {game.players.map((player: any, index: number) => (
-                      <div>
+                      <div key={index}>
                         {player.cards && (
                           <div>
                             {player.name === playerName &&
@@ -258,7 +260,7 @@ const App = (): JSX.Element => {
                     </Grid>
                   </Grid>
                 )}
-                {game.players && !game.started && (
+                {game.players && !game.started && creator && (
                   <Grid item md={12}>
                     <Button
                       className={classes.button}
