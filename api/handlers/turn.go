@@ -14,9 +14,12 @@ func (svc *Service) Turn(w http.ResponseWriter, req *http.Request) {
 	game := svc.Store.Get(gameID)
 	cardDescriptor := mux.Vars(req)["card"]
 
+	stick := req.URL.Query().Get("stick")
+	stickBool := stick == "true"
+
 	card := games.GetCardFromDescriptor(cardDescriptor)
 	card.Description = cardDescriptor
 
-	game.Turn(card)
+	game.Turn(card, stickBool)
 	json.NewEncoder(w).Encode(game)
 }

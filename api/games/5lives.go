@@ -92,7 +92,7 @@ func (fl *FiveLives) Start() error {
 }
 
 // Turn ...
-func (fl *FiveLives) Turn(card Card) {
+func (fl *FiveLives) Turn(card Card, stick bool) {
 	playerLostLife := false
 
 	for i, player := range fl.Players {
@@ -296,4 +296,9 @@ func (fl *FiveLives) setFirstPlayer(dealerPosition int) {
 
 func remove(slice []Card, s int) []Card {
 	return append(slice[:s], slice[s+1:]...)
+}
+
+// NextRound ...
+func (fl *FiveLives) NextRound() error {
+	return nil
 }

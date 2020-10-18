@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-const apiURL = "http://localhost:8080";
+const apiURL = "https://api.mattgames.co.uk";
 
 export const create = async (gameName: string): Promise<string> => {
   const response = await Axios.post(`${apiURL}/games/${gameName}`);
@@ -46,10 +46,26 @@ export const startGame = async (
 export const turn = async (
   gameName: string,
   gameID: string,
-  turn: string
+  turn: string,
+  stick: boolean
 ): Promise<boolean> => {
   const response = await Axios.post(
-    `${apiURL}/games/${gameName}/instances/${gameID}/turn/${turn}`
+    `${apiURL}/games/${gameName}/instances/${gameID}/turn/${turn}?stick=${stick}`
+  );
+
+  if (response.data) {
+    return true;
+  }
+
+  return false;
+};
+
+export const nextRound = async (
+  gameName: string,
+  gameID: string
+): Promise<boolean> => {
+  const response = await Axios.post(
+    `${apiURL}/games/${gameName}/instances/${gameID}/next-round`
   );
 
   if (response.data) {

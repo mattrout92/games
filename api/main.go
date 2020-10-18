@@ -19,6 +19,7 @@ func main() {
 	r.Methods("OPTIONS", "POST").Path("/games/{gameName}").HandlerFunc(svc.Create)
 	r.Methods("OPTIONS", "POST").Path("/games/{gameName}/instances/{gameID}").HandlerFunc(svc.Start)
 	r.Methods("OPTIONS", "POST").Path("/games/{gameName}/instances/{gameID}/turn/{card}").HandlerFunc(svc.Turn)
+	r.Methods("OPTIONS", "POST").Path("/games/{gameName}/instances/{gameID}/next-round").HandlerFunc(svc.NextRound)
 
 	r.Methods("OPTIONS", "POST").Path("/games/{gameName}/instances/{gameID}/players/{playerName}").HandlerFunc(svc.AddPlayer)
 

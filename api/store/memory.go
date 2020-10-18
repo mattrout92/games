@@ -29,6 +29,13 @@ func (m *Memory) Create(gameName string) string {
 		}
 	}
 
+	if gameName == "ChaseTheAce" {
+		m.games[id] = &games.ChaseTheAce{
+			ID:   id,
+			Name: gameName,
+		}
+	}
+
 	return id
 }
 

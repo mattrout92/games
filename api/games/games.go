@@ -5,8 +5,9 @@ type Game interface {
 	AddPlayer(name string) error
 	GetPlayers() []Player
 	Start() error
-	Turn(Card)
+	Turn(Card, bool)
 	AddListener(chan (struct{}))
+	NextRound() error
 }
 
 // Player ...
