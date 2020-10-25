@@ -165,6 +165,8 @@ func (ch *ChaseTheAce) Turn(card Card, stick bool) {
 		}
 	}
 
+	ch.checkGameOver()
+
 	for _, listener := range ch.listeners {
 		listener <- struct{}{}
 	}
@@ -335,5 +337,19 @@ func (ch *ChaseTheAce) setFirstPlayer(dealerPosition int) {
 			ch.Players[i].IsTurn = true
 			return
 		}
+	}
+}
+
+func (ch *ChaseTheAce) checkGameOver() {
+	playersStillIn := 0
+
+	for _, player := range ch.Players {
+		if player.Lives > 0 {
+			playersStillIn++
+		}
+	}
+
+	if playersStillIn < 2 {
+		ch.GameFinished = true
 	}
 }
