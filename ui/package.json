@@ -20,7 +20,7 @@
     "react-playing-card": "^0.2.5",
     "react-playing-cards": "^0.6.3",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.3",
+    "react-scripts": "^5.0.1",
     "typescript": "~3.7.2",
     "websocket": "^1.0.31"
   },
